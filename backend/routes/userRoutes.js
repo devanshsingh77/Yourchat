@@ -1,21 +1,32 @@
+console.log(__dirname);
 const express = require("express");
 const router = express.Router();
 
+// CONTROLLERS
 const {
   registerUser,
-  loginUser,
-  getMe
-} = require("../controllers/userControllers");
+  authUser,
+  allUsers,
+} = require("../controllers/userController.js");
 
-const { protect } = require("../middleware/authMiddleware");
+// MIDDLEWARE
+const protect = require("../middleware/authMiddleware");
 
-// REGISTER
+// ===============================
+// PUBLIC ROUTES (NO TOKEN REQUIRED)
+// ===============================
+
+// REGISTER USER
 router.post("/register", registerUser);
 
-// LOGIN
-router.post("/login", loginUser);
+// LOGIN USER
+router.post("/login", authUser);
 
-// GET LOGGED IN USER
-router.get("/me", protect, getMe);
+// ===============================
+// PROTECTED ROUTES (TOKEN REQUIRED)
+// ===============================
+
+// GET ALL USERS
+router.get("/", protect, allUsers);
 
 module.exports = router;
